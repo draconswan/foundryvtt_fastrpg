@@ -1,0 +1,45 @@
+{
+  "BOILERPLATE": {
+    "Ability": {
+      "Dex": { "long": "Dexterity", "abbr": "dex" },
+      "Bod": { "long": "Body", "abbr": "bod" },
+      "Int": { "long": "Intelligence", "abbr": "int" },
+      "Will": { "long": "Willpower", "abbr": "will" }
+    },
+    "SecondaryAbility": {
+      "HealthPoints": { "long":  "Health Points", "abbr": "hp"},
+      "MindPoints": { "long":  "Mind Points", "abbr":  "mp"},
+      "React": { "long":  "Reaction", "abbr": "react"},
+      "Fate": { "long":  "Fate Points", "abbr":  "fate"}
+    },
+    "SheetLabels": {
+      "Actor": "Boilerplate Actor Sheet",
+      "Item": "Boilerplate Item Sheet"
+    },
+    "Item": {
+      "Spell": {
+        "SpellLVL": "Level {level} Spells",
+        "AddLVL": "Add LVL {level}"
+      }
+    },
+    "Effect": {
+      "Source": "Source",
+      "Toggle": "Toggle Effect",
+      "Temporary": "Temporary Effects",
+      "Passive": "Passive Effects",
+      "Inactive": "Inactive Effects"
+    }
+  },
+
+  "TYPES": {
+    "Actor": {
+      "character": "Character",
+      "npc": "NPC"
+    },
+    "Item": {
+      "item": "Item",
+      "feature": "Feature",
+      "spell": "Spell"
+    }
+  }
+}

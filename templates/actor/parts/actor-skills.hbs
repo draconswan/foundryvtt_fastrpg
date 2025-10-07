@@ -1,0 +1,30 @@
+<ol class='items-list'>
+    <li class='item flexrow items-header'>
+        <div class='item-name'>{{localize 'Skills'}}</div>
+        <div class='item-controls'>
+            <a class='item-control item-create'
+               title='Add Skill'
+               data-type='skill'>
+                <i class='fas fa-plus'></i>
+                {{localize 'DOCUMENT.New' type='Skill'}}
+            </a>
+        </div>
+    </li>
+    {{#each skills as |item id|}}
+        <li class='item flexrow' data-item-id='{{item._id}}'>
+            <div class='item-name'>{{item.name}}</div>
+            <div class="item-prop">{{item.system.ranks}}</div>
+            <div class="item-prop">{{item.system.specialization}}</div>
+            <div class='item-controls'>
+                <a class='item-control item-edit'
+                   title='{{localize "DOCUMENT.Edit" type='Skill'}}'>
+                    <i class='fas fa-edit'></i>
+                </a>
+                <a class='item-control item-delete'
+                   title='{{localize "DOCUMENT.Delete" type='Skill'}}'>
+                    <i class='fas fa-trash'></i>
+                </a>
+            </div>
+        </li>
+    {{/each}}
+</ol>

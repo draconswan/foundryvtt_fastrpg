@@ -1,0 +1,77 @@
+{
+  "Actor": {
+    "types": ["character", "npc"],
+    "templates": {
+      "base": {
+        "healthpoints": {
+          "value": 10,
+          "min": 0
+        },
+        "mindpoints": {
+          "value": 5,
+          "min": 0
+        },
+        "react": {
+          "value": 5,
+          "min": 0
+        },
+        "fate": {
+          "value": 1,
+          "min": 0
+        },
+        "biography": ""
+      }
+    },
+    "character": {
+      "templates": ["base"],
+      "abilities": {
+        "dex": {
+          "value": 5
+        },
+        "bod": {
+          "value": 5
+        },
+        "int": {
+          "value": 5
+        },
+        "will": {
+          "value": 5
+        }
+      }
+    },
+    "npc": {
+      "templates": ["base"],
+      "cr": 0
+    }
+  },
+  "Item": {
+    "types": ["item", "feature", "spell", "skill", "benefit", "power"],
+    "templates": {
+      "base": {
+        "description": ""
+      }
+    },
+    "item": {
+      "templates": ["base"],
+      "quantity": 1,
+      "weight": 0,
+      "formula": "d20 + @str.mod + ceil(@lvl / 2)"
+    },
+    "feature": {
+      "templates": ["base"]
+    },
+    "spell": {
+      "templates": ["base"],
+      "spellLevel": 1
+    },
+    "skill": {
+      "templates": ["base"]
+    },
+    "benefit": {
+      "templates": ["base"]
+    },
+    "power": {
+      "templates": ["base"]
+    }
+  }
+}

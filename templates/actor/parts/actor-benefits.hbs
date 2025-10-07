@@ -1,0 +1,30 @@
+<ol class='items-list'>
+    <li class='item flexrow items-header'>
+        <div class='item-name'>{{localize 'Benefits'}}</div>
+        <div class='item-controls'>
+            <a class='item-control item-create'
+               title='Add Benefit'
+               data-type='benefit'>
+                <i class='fas fa-plus'></i>
+                {{localize 'DOCUMENT.New' type='Benefit'}}
+            </a>
+        </div>
+    </li>
+    {{#each benefits as |item id|}}
+        <li class='item flexrow' data-item-id='{{item._id}}'>
+            <div class='item-name'>{{item.name}}</div>
+            <div class="item-prop">{{item.system.level}}</div>
+            <div class="item-prop">{{item.system.notes}}</div>
+            <div class='item-controls'>
+                <a class='item-control item-edit'
+                   title='{{localize "DOCUMENT.Edit" type='Benefit'}}'>
+                    <i class='fas fa-edit'></i>
+                </a>
+                <a class='item-control item-delete'
+                   title='{{localize "DOCUMENT.Delete" type='Benefit'}}'>
+                    <i class='fas fa-trash'></i>
+                </a>
+            </div>
+        </li>
+    {{/each}}
+</ol>

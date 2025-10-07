@@ -1,0 +1,145 @@
+<form class="{{cssClass}} {{actor.type}} flexcol" autocomplete="off">
+
+    {{!-- Sheet Header --}}
+    <header class="sheet-header">
+        <img class="profile-img" src="{{actor.img}}" data-edit="img" title="{{actor.name}}" height="100" width="100"/>
+        <div class="header-fields">
+            <h1 class="charname"><input name="name" type="text" value="{{actor.name}}" placeholder="Name"/></h1>
+            {{!-- The grid classes are defined in scss/global/_grid.scss. To use,
+            use both the "grid" and "grid-Ncol" class where "N" can be any number
+            from 1 to 12 and will create that number of columns.  --}}
+            <div class="resources grid grid-2col">
+                <div class="">
+                    {{!-- "flex-group-center" is also defined in the _grid.scss file
+                    and it will add a small amount of padding, a border, and will
+                    center all of its child elements content and text. --}}
+                    <div class="resource flex-group-center">
+                        <label for="system.healthpoints.value" class="resource-label">Health Points</label>
+                        <div class="resource-content flexrow flex-center flex-between">
+                            <input type="text" name="system.healthpoints.value" value="{{system.healthpoints.value}}"
+                                   data-dtype="Number"/>
+                            <span>/</span>
+                            <input type="text" name="system.healthpoints.max" value="{{system.healthpoints.max}}"
+                                   data-dtype="Number"/>
+                        </div>
+                    </div>
+                    <div class="resource flex-group-center">
+                        <label for="system.mindpoints.value" class="resource-label">Mind Points</label>
+                        <div class="resource-content flexrow flex-center flex-between">
+                            <input type="text" name="system.mindpoints.value" value="{{system.mindpoints.value}}"
+                                   data-dtype="Number"/>
+                            <span>/</span>
+                            <input type="text" name="system.mindpoints.max" value="{{system.mindpoints.max}}"
+                                   data-dtype="Number"/>
+                        </div>
+                    </div>
+                    <div class="resource flex-group-center">
+                        <label for="system.react.value" class="resource-label">React</label>
+                        <div class="resource-content flexrow flex-center flex-between">
+                            <input type="text" name="system.react.value" value="{{system.react.value}}"
+                                   data-dtype="Number"/>
+                        </div>
+                    </div>
+                    <div class="resource flex-group-center">
+                        <label for="system.fate.value" class="resource-label">Fate</label>
+                        <div class="resource-content flexrow flex-center flex-between">
+                            <input type="text" name="system.fate.value" value="{{system.fate.value}}"
+                                   data-dtype="Number"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="">
+                    {{!-- "flex-group-center" is also defined in the _grid.scss file
+                    and it will add a small amount of padding, a border, and will
+                    center all of its child elements content and text. --}}
+                    <div class="resource flex-group-center">
+                        <label for="system.armor.value" class="resource-label">Armor</label>
+                        <div class="resource-content flexrow flex-center flex-between">
+                            <input type="text" name="system.armor.value" value="{{system.armor.value}}"
+                                   data-dtype="Number"/>
+                        </div>
+                    </div>
+                    <div class="resource flex-group-center">
+                        <label for="system.shielding.value" class="resource-label">Shielding</label>
+                        <div class="resource-content flexrow flex-center flex-between">
+                            <input type="text" name="system.shielding.value" value="{{system.shielding.value}}"
+                                   data-dtype="Number"/>
+                        </div>
+                    </div>
+                    <div class="resource flex-group-center">
+                        <label for="system.money.value" class="resource-label">Money</label>
+                        <div class="resource-content flexrow flex-center flex-between">
+                            <input type="text" name="system.money.value" value="{{system.money.value}}"
+                                   data-dtype="Number"/>
+                        </div>
+                    </div>
+                    <div class="resource flex-group-center">
+                        <label for="system.class.value" class="resource-label">Class</label>
+                        <div class="resource-content flexrow flex-center flex-between">
+                            <input type="text" name="system.class.value" value="{{system.class.value}}"
+                                   data-dtype="String"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    {{!-- Sheet Tab Navigation --}}
+    <nav class="sheet-tabs tabs" data-group="primary">
+        {{!-- Default tab is specified in actor-sheet.mjs --}}
+        <a class="item" data-tab="features">Skills/Benefits</a>
+        <a class="item" data-tab="items">Powers/Equipment</a>
+        <a class="item" data-tab="description">Character Notes</a>
+    </nav>
+
+    {{!-- Sheet Body --}}
+    <section class="sheet-body">
+
+        {{!-- Owned Features Tab --}}
+        <div class="tab features" data-group="primary" data-tab="features">
+            <section class="grid grid-3col">
+                <aside class="sidebar">
+
+                    {{!-- The grid classes are defined in scss/global/_grid.scss. To use,
+                    use both the "grid" and "grid-Ncol" class where "N" can be any number
+                    from 1 to 12 and will create that number of columns.  --}}
+                    <div class="abilities flexcol">
+                        {{#each system.abilities as |ability key|}}
+                            <div class="ability flexrow flex-group-center">
+                                <label for="system.abilities.{{key}}.value"
+                                       class="resource-label rollable flexlarge align-left"
+                                       data-roll="d20+@abilities.{{key}}.mod"
+                                       data-label="{{localize (lookup @root.config.abilities key)}}">{{localize
+                                        (lookup @root.config.abilities key)}}</label>
+                                <input type="text" name="system.abilities.{{key}}.value" value="{{ability.value}}"
+                                       data-dtype="Number"/>
+                            </div>
+                        {{/each}}
+                    </div>
+                </aside>
+
+                {{!-- For the main features list, span the right two columns --}}
+                <section class="main grid-span-2">
+                    {{!-- This is a Handlebars partial. They're stored in the `/parts` folder next to this sheet, and defined in module/helpers/templates.mjs --}}
+                    {{> "systems/boilerplate/templates/actor/parts/actor-skills.hbs"}}
+                </section>
+
+                <section class="main grid-span-2 grid-start-2">
+                    {{> "systems/boilerplate/templates/actor/parts/actor-benefits.hbs" }}
+                </section>
+            </section>
+        </div>
+
+        {{!-- Owned Items Tab --}}
+        <div class="tab items" data-group="primary" data-tab="items">
+            {{> "systems/boilerplate/templates/actor/parts/actor-items.hbs"}}
+        </div>
+
+        {{!-- Biography Tab --}}
+        <div class="tab biography" data-group="primary" data-tab="description">
+            {{!-- Editors must receive enriched text data from getData to properly handle rolls --}}
+            {{editor enrichedBiography target="system.biography" engine="prosemirror" button=true editable=editable}}
+        </div>
+    </section>
+</form>
