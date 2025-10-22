@@ -211,31 +211,31 @@ inquirer
       type: 'input',
       name: 'packageName',
       message: 'Enter the package name of your system, such as "my-system" (alphanumeric characters and hyphens only):',
-      default: 'my-system'
+      default: 'fastrpg'
     },
     {
       type: 'input',
       name: 'titleName',
       message: 'Enter the formatted name of your system, such as "My System":',
-      default: 'My System'
+      default: 'Fast RPG'
     },
     {
       type: 'input',
       name: 'className',
       message: 'Enter the name of your system for usage in JS classes, such as "MySystem" (alphanumeric characters only):',
-      default: 'MySystem'
+      default: 'FastRPG'
     },
     {
       type: 'input',
       name: 'constantName',
       message: 'Enter the name of your system for usage in constants, such as "MY_SYSTEM" (alphanumeric characters and underscores only):',
-      default: 'MY_SYSTEM'
+      default: 'FAST_RPG'
     },
     {
       type: 'confirm',
       name: 'dataModel',
       message: 'Use DataModel instead of template.json?',
-      default: false
+      default: true
     }
   ])
   // Handle answers.

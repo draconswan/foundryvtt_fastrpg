@@ -1,12 +1,12 @@
 {
   "BOILERPLATE": {
-    "Ability": {
+    "PrimaryAttribute": {
       "Dex": { "long": "Dexterity", "abbr": "dex" },
       "Bod": { "long": "Body", "abbr": "bod" },
       "Int": { "long": "Intelligence", "abbr": "int" },
       "Will": { "long": "Willpower", "abbr": "will" }
     },
-    "SecondaryAbility": {
+    "SecondaryAttribute": {
       "HealthPoints": { "long":  "Health Points", "abbr": "hp"},
       "MindPoints": { "long":  "Mind Points", "abbr":  "mp"},
       "React": { "long":  "Reaction", "abbr": "react"},
@@ -38,8 +38,9 @@
     },
     "Item": {
       "item": "Item",
-      "feature": "Feature",
-      "spell": "Spell"
+      "power": "Power",
+      "skill": "Skill",
+      "benefit": "Benefit"
     }
   }
 }

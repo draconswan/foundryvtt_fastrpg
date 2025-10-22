@@ -102,46 +102,39 @@ export class BoilerplateActorSheet extends ActorSheet {
    * @param {object} context The context object to mutate
    */
   _prepareItems(context) {
-    // Initialize containers.
-    const gear = [];
-    const features = [];
-    const spells = {
-      0: [],
-      1: [],
-      2: [],
-      3: [],
-      4: [],
-      5: [],
-      6: [],
-      7: [],
-      8: [],
-      9: [],
-    };
+      // Initialize containers.
+      const gear = [];
+      const powers = [];
+      const skills = [];
+      const benefits = [];
 
-    // Iterate through items, allocating to containers
-    for (let i of context.items) {
-      i.img = i.img || Item.DEFAULT_ICON;
-      // Append to gear.
-      if (i.type === 'item') {
-        gear.push(i);
-      }
-      // Append to features.
-      else if (i.type === 'feature') {
-        features.push(i);
-      }
-      // Append to spells.
-      else if (i.type === 'spell') {
-        if (i.system.spellLevel != undefined) {
-          spells[i.system.spellLevel].push(i);
+      // Iterate through items, allocating to containers
+      for (let i of context.items) {
+        i.img = i.img || Item.DEFAULT_ICON;
+        // Append to gear.
+        if (i.type === 'item') {
+          gear.push(i);
+        }
+        // Append to powers.
+        else if (i.type === 'power') {
+          powers.push(i);
+        }
+        // Append to skills.
+        else if (i.type === 'skill') {
+          skills.push(i);
+        }
+        // Append to skills.
+        else if (i.type === 'benefit') {
+          benefits.push(i);
         }
       }
-    }
 
-    // Assign and return
-    context.gear = gear;
-    context.features = features;
-    context.spells = spells;
-  }
+      // Assign and return
+      context.gear = gear;
+      context.powers = powers;
+      context.skills = skills;
+      context.benefits = benefits;
+    }
 
   /* -------------------------------------------- */
 
@@ -206,7 +199,7 @@ export class BoilerplateActorSheet extends ActorSheet {
     // Get the type of item to create.
     const type = header.dataset.type;
     // Grab any data associated with this control.
-    const data = duplicate(header.dataset);
+    const data = foundry.utils.duplicate(header.dataset);
     // Initialize a default name.
     const name = `New ${type.capitalize()}`;
     // Prepare the item object.

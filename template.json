@@ -24,7 +24,7 @@
     },
     "character": {
       "templates": ["base"],
-      "abilities": {
+      "attributes": {
         "dex": {
           "value": 5
         },

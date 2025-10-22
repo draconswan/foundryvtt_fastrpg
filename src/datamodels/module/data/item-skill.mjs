@@ -8,19 +8,10 @@ export default class BoilerplateSkill extends BoilerplateItemBase {
 
         schema.ranks = new fields.NumberField({...requiredInteger, initial: 1, min: 1, max: 5});
         schema.specialization = new fields.StringField({ initial: "Skill Specialization"});
-        schema.roll = new fields.SchemaField({
-            diceNum: new fields.NumberField({ ...requiredInteger, initial: 1, min: 1 }),
-            diceSize: new fields.StringField({ initial: "f6" }),
-            diceBonus: new fields.StringField({ initial: "+0" })
-        });
-        schema.formula = new fields.StringField({ blank:true });
 
         return schema;
     }
 
     prepareDerivedData() {
-        const roll = this.roll;
-
-        this.formula = `${roll.diceNum}${roll.diceSize}${roll.diceBonus}`
     }
 }

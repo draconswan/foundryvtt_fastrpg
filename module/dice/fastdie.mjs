@@ -1,4 +1,4 @@
-export class FastDieTerm extends DiceTerm {
+export class FastDieTerm extends foundry.dice.terms.DiceTerm {
   constructor({number = 1, faces = 6, options = {}} = {}) {
     super({number, faces, options});
   }
@@ -22,6 +22,6 @@ export class FastDieTerm extends DiceTerm {
   }
 
   get formula() {
-    return `${this.number}dC`; // 'C' for custom
+    return `${this.number}ds`; // 'C' for custom
   }
 }

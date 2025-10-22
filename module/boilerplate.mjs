@@ -8,14 +8,14 @@ import { BoilerplateItemSheet } from './sheets/item-sheet.mjs';
 import { preloadHandlebarsTemplates } from './helpers/templates.mjs';
 import { BOILERPLATE } from './helpers/config.mjs';
 // Import Custom DiceTerm
-import { FastDieTerm } from './dice/fastdie.js';
+import { FastDieTerm } from './dice/fastdie.mjs';
 
 /* -------------------------------------------- */
 /*  Init Hook                                   */
 /* -------------------------------------------- */
 
 Hooks.once('init', function () {
-  CONFIG.Dice.terms["f6"] = FastDieTerm
+  CONFIG.Dice.terms["s"] = FastDieTerm
   // Add utility classes to the global game object so that they're more easily
   // accessible in global contexts.
   game.boilerplate = {

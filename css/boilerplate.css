@@ -364,3 +364,6 @@
 .boilerplate .effects .item .effect-controls {
   border: none;
 }
+.fastdie-zero { color: red; }
+.fastdie-one { color: orange; }
+.fastdie-two { color: green; }

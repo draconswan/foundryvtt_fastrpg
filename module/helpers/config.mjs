@@ -4,30 +4,30 @@ export const BOILERPLATE = {};
  * The set of Ability Scores used within the system.
  * @type {Object}
  */
-BOILERPLATE.abilities = {
-  dex: 'BOILERPLATE.Ability.Dex.long',
-  bod: 'BOILERPLATE.Ability.Bod.long',
-  int: 'BOILERPLATE.Ability.Int.long',
-  will: 'BOILERPLATE.Ability.Will.long'
+BOILERPLATE.primaryAttributes = {
+  dex: 'BOILERPLATE.PrimaryAttribute.Dex.long',
+  bod: 'BOILERPLATE.PrimaryAttribute.Bod.long',
+  int: 'BOILERPLATE.PrimaryAttribute.Int.long',
+  will: 'BOILERPLATE.PrimaryAttribute.Will.long'
 };
 
-BOILERPLATE.secondaryAbilities = {
-  healthpoints: 'BOILERPLATE.SecondaryAbility.HealthPoints.long',
-  mindpoints: 'BOILERPLATE.SecondaryAbility.MindPoints.long',
-  react: 'BOILERPLATE.SecondaryAbility.React.long',
-  fate: "BOILERPLATE.SecondaryAbility.Fate.long"
+BOILERPLATE.secondaryAttributes = {
+  healthpoints: 'BOILERPLATE.SecondaryAttribute.HealthPoints.long',
+  mindpoints: 'BOILERPLATE.SecondaryAttribute.MindPoints.long',
+  react: 'BOILERPLATE.SecondaryAttribute.React.long',
+  fate: "BOILERPLATE.SecondaryAttribute.Fate.long"
 };
 
 BOILERPLATE.abilityAbbreviations = {
-  dex: 'BOILERPLATE.Ability.Dex.abbr',
-  bod: 'BOILERPLATE.Ability.Bod.abbr',
-  int: 'BOILERPLATE.Ability.Int.abbr',
-  will: 'BOILERPLATE.Ability.Will.abbr'
+  dex: 'BOILERPLATE.PrimaryAttribute.Dex.abbr',
+  bod: 'BOILERPLATE.PrimaryAttribute.Bod.abbr',
+  int: 'BOILERPLATE.PrimaryAttribute.Int.abbr',
+  will: 'BOILERPLATE.PrimaryAttribute.Will.abbr'
 };
 
 BOILERPLATE.secondaryAbilityAbbreviations = {
-  healthpoints: 'BOILERPLATE.SecondaryAbility.HealthPoints.abbr',
-  mindpoints: 'BOILERPLATE.SecondaryAbility.MindPoints.abbr',
-  react: 'BOILERPLATE.SecondaryAbility.React.abbr',
-  fate: "BOILERPLATE.SecondaryAbility.Fate.abbr"
+  healthpoints: 'BOILERPLATE.SecondaryAttribute.HealthPoints.abbr',
+  mindpoints: 'BOILERPLATE.SecondaryAttribute.MindPoints.abbr',
+  react: 'BOILERPLATE.SecondaryAttribute.React.abbr',
+  fate: "BOILERPLATE.SecondaryAttribute.Fate.abbr"
 };

@@ -4,12 +4,12 @@
  * @return {Promise}
  */
 export const preloadHandlebarsTemplates = async function () {
-  return loadTemplates([
-    // Actor partials.
-    'systems/boilerplate/templates/actor/parts/actor-skills.hbs',
-    'systems/boilerplate/templates/actor/parts/actor-benefits.hbs',
-    'systems/boilerplate/templates/actor/parts/actor-items.hbs',
-    // Item partials
-    'systems/boilerplate/templates/item/parts/item-effects.hbs',
-  ]);
+    return loadTemplates([
+        // Actor partials.
+        'systems/boilerplate/templates/actor/parts/actor-skills.hbs',
+        'systems/boilerplate/templates/actor/parts/actor-benefits.hbs',
+        'systems/boilerplate/templates/actor/parts/actor-items.hbs',
+        // Item partials
+        'systems/boilerplate/templates/item/parts/item-effects.hbs',
+    ]);
 };

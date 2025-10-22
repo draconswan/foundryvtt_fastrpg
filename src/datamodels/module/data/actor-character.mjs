@@ -5,27 +5,13 @@ export default class BoilerplateCharacter extends BoilerplateActorBase {
   static defineSchema() {
     const fields = foundry.data.fields;
     const requiredInteger = { required: true, nullable: false, integer: true };
+    const requiredDouble = { required: true, nullable: false, integer: false };
     const schema = super.defineSchema();
 
     schema.attributes = new fields.SchemaField({
       level: new fields.SchemaField({
         value: new fields.NumberField({ ...requiredInteger, initial: 1 })
       }),
-    });
-
-    schema.secondaryAbilities = new fields.SchemaField({
-      healthpoints: new fields.SchemaField({
-        value: new fields.NumberField({ ...requiredInteger, initial: 3 })
-      }),
-      mindpoints: new fields.SchemaField({
-        value: new fields.NumberField({ ...requiredInteger, initial: 3 })
-      }),
-      react: new fields.SchemaField({
-        value: new fields.NumberField({ ...requiredInteger, initial: 3 })
-      }),
-      fate: new fields.SchemaField({
-        value: new fields.NumberField({ ...requiredInteger, initial: 1 })
-      })
     });
 
     schema.armor = new fields.SchemaField({
@@ -45,7 +31,15 @@ export default class BoilerplateCharacter extends BoilerplateActorBase {
     });
 
     // Iterate over ability names and create a new SchemaField for each.
-    schema.abilities = new fields.SchemaField(Object.keys(CONFIG.BOILERPLATE.abilities).reduce((obj, ability) => {
+    schema.primaryAttributes = new fields.SchemaField(Object.keys(CONFIG.BOILERPLATE.primaryAttributes).reduce((obj, ability) => {
+      obj[ability] = new fields.SchemaField({
+        value: new fields.NumberField({ ...requiredInteger, initial: 5, min: 0 }),
+      });
+      return obj;
+    }, {}));
+
+    // Iterate over ability names and create a new SchemaField for each.
+    schema.secondaryAttributes = new fields.SchemaField(Object.keys(CONFIG.BOILERPLATE.secondaryAttributes).reduce((obj, ability) => {
       obj[ability] = new fields.SchemaField({
         value: new fields.NumberField({ ...requiredInteger, initial: 5, min: 0 }),
       });
@@ -55,26 +49,27 @@ export default class BoilerplateCharacter extends BoilerplateActorBase {
     return schema;
   }
 
-    prepareDerivedData() {
-      const hp = this.system.healthpoints;
-      const mp = this.system.mindpoints;
-      const react = this.system.react;
-      const fate = this.system.fate;
+  prepareDerivedData() {
+    const healthpoints = this.secondaryAttributes.healthpoints;
+    const mindpoints = this.secondaryAttributes.mindpoints;
+    const react = this.secondaryAttributes.react;
+    const fate = this.secondaryAttributes.fate;
 
-      hp.value = this.system.secondaryAbilities?.healthpoints?.value * 3 ?? hp.value;
-      hp.max = this.system.secondaryAbilities?.healthpoints?.value * 3 ?? hp.max;
+    healthpoints.value = this.primaryAttributes?.bod?.value * 3 ?? healthpoints.value;
+    healthpoints.max = this.primaryAttributes?.bod?.value * 3 ?? healthpoints.max;
 
-      mp.value = this.system.secondaryAbilities?.mindpoints?.value * 3 ?? mp.value;
-      mp.max = this.system.secondaryAbilities?.mindpoints?.value * 3 ?? mp.max;
+    mindpoints.value = this.primaryAttributes?.will?.value * 3 ?? mindpoints.value;
+    mindpoints.max = this.primaryAttributes?.will?.value * 3 ?? mindpoints.max;
 
-      react.value = this.system.secondaryAbilities?.react?.value ?? react.value;
-      fate.value = this.system.secondaryAbilities?.fate?.value ?? fate.value;
+    react.value = (this.primaryAttributes?.dex?.value + this.primaryAttributes?.int?.value) / 2.0 ?? react.value;
 
-      this.system.armor.value = 0;
-      this.system.shielding.value = 0;
-      this.system.money.value = 0;
-      this.system.class.value = "";
-    }
+    fate.value = 1;
+
+    this.armor.value = 0;
+    this.shielding.value = 0;
+    this.money.value = 0;
+    this.class.value = "";
+  }
 
   getRollData() {
     const data = {};
