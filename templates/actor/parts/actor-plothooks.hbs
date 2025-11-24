@@ -1,30 +1,30 @@
 <ol class='items-list'>
-    <h3>Benefits</h3>
+    <h3>Plothooks</h3>
     <li class='item flexrow items-header'>
         <div class='item-name'>{{localize 'Name'}}</div>
-        <div class="item-prop">{{localize 'Level'}}</div>
-        <div class="item-name">{{localize 'Description'}}</div>
-        <div class='item-controls'>
+        <div class="item-prop">{{localize 'Points'}}</div>
+        <div class="item-name">{{localize 'Comments'}}</div>
+        <div class='item-prop'>
             <a class='item-control item-create'
-               title='Add Benefit'
-               data-type='benefit'>
+               title='Add Plothook'
+               data-type='plothook'>
                 <i class='fas fa-plus'></i>
-                {{localize 'DOCUMENT.New' type='Benefit'}}
+                {{localize 'DOCUMENT.New' type='Plothook'}}
             </a>
         </div>
     </li>
-    {{#each benefits as |item id|}}
+    {{#each plothooks as |item id|}}
         <li class='item flexrow' data-item-id='{{item._id}}'>
             <div class='item-name'>{{item.name}}</div>
-            <div class="item-prop">{{item.system.level}}</div>
-            <div class="item-name">{{item.system.details}}</div>
-            <div class='item-controls'>
+            <div class="item-prop">{{item.system.points}}</div>
+            <div class="item-name">{{item.system.comments}}</div>
+            <div class='item-prop'>
                 <a class='item-control item-edit'
-                   title='{{localize "DOCUMENT.Edit" type='Benefit'}}'>
+                   title='{{localize "DOCUMENT.Edit" type='Plothook'}}'>
                     <i class='fas fa-edit'></i>
                 </a>
                 <a class='item-control item-delete'
-                   title='{{localize "DOCUMENT.Delete" type='Benefit'}}'>
+                   title='{{localize "DOCUMENT.Delete" type='Plothook'}}'>
                     <i class='fas fa-trash'></i>
                 </a>
             </div>

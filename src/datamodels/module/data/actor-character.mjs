@@ -55,20 +55,56 @@ export default class BoilerplateCharacter extends BoilerplateActorBase {
     const react = this.secondaryAttributes.react;
     const fate = this.secondaryAttributes.fate;
 
-    healthpoints.value = this.primaryAttributes?.bod?.value * 3 ?? healthpoints.value;
-    healthpoints.max = this.primaryAttributes?.bod?.value * 3 ?? healthpoints.max;
+    const armor = this.armor;
+    const shielding = this.shielding;
 
-    mindpoints.value = this.primaryAttributes?.will?.value * 3 ?? mindpoints.value;
-    mindpoints.max = this.primaryAttributes?.will?.value * 3 ?? mindpoints.max;
+    const bod = this.primaryAttributes?.bod?.value;
+    const will = this.primaryAttributes?.will?.value;
+    const dex = this.primaryAttributes?.dex?.value;
+    const int = this.primaryAttributes?.int?.value;
 
-    react.value = (this.primaryAttributes?.dex?.value + this.primaryAttributes?.int?.value) / 2.0 ?? react.value;
+    healthpoints.value = bod != null ? bod * 3 : healthpoints.value;
+    healthpoints.max = bod != null ? bod * 3 : healthpoints.max;
 
-    fate.value = 1;
+    mindpoints.value = will != null ? will * 3 : mindpoints.value;
+    mindpoints.max = will != null ? will * 3 : mindpoints.max;
 
-    this.armor.value = 0;
-    this.shielding.value = 0;
-    this.money.value = 0;
-    this.class.value = "";
+    let armorBonus = 0;
+    let shieldingBonus = 0;
+    if (this.parent?.items?.size > 0){
+      for (const item of this.parent.items) {
+        if (item.type == "armor") {
+          if (item.system.armor != null && item.system.armor > 0) {
+            armorBonus += item.system.armor
+          }
+          if (item.system.shielding != null && item.system.shielding > 0) {
+            shieldingBonus += item.system.shielding
+          }
+        }
+        if (item.type == "benefit") {
+          if (item.name == "Tough") {
+            let level = item.system.level
+            if (level == 5) {
+              armorBonus += Math.ceil(bod/2.0)
+            } else if (level == 10) {
+              armorBonus += bod
+            }
+          }
+          if (item.name == "Iron Will") {
+            let level = item.system.level
+            if (level == 5) {
+              shieldingBonus += Math.ceil(will/2.0)
+            } else if (level == 10) {
+              shieldingBonus += will
+            }
+          }
+        }
+      }
+    }
+    armor.value = armorBonus
+    shielding.value = shieldingBonus
+
+    react.value = (dex != null && int != null) ? (dex + int) / 2.0 : react.value;
   }
 
   getRollData() {
@@ -76,14 +112,58 @@ export default class BoilerplateCharacter extends BoilerplateActorBase {
 
     // Copy the ability scores to the top level, so that rolls can use
     // formulas like `@str.mod + 4`.
-    if (this.abilities) {
-      for (let [k,v] of Object.entries(this.abilities)) {
+    if (this.primaryAttributes) {
+      for (let [k,v] of Object.entries(this.primaryAttributes)) {
+        data[k] = foundry.utils.deepClone(v);
+      }
+    }
+    if (this.secondaryAttributes) {
+      for (let [k,v] of Object.entries(this.secondaryAttributes)) {
         data[k] = foundry.utils.deepClone(v);
       }
     }
 
     data.lvl = this.attributes.level.value;
-
+    data.armor = this.armor.value;
+    data.shielding = this.shielding.value;
+    data.money = this.money.value;
+    data.class = this.class.value;
     return data
+  }
+
+  async _onRoll(event) {
+    event.preventDefault();
+    const button = event.currentTarget;
+    const action = button.dataset.action;
+    console.log(action);
+    switch (action) {
+      case "rollStrDice": {
+        const mod = this.actor.system.abilities.str.mod;
+        if (mod > 0) {
+          const roll = new Roll(`${mod}d20`);
+          await roll.evaluate({ async: true });
+          roll.toMessage({ flavor: "Strength Dice Pool" });
+        } else {
+          ui.notifications.warn("Strength modifier must be at least 1 to roll.");
+        }
+        break;
+      }
+
+      // Add more custom actions here...
+
+      default: {
+        // Fallback: use data-roll if present
+        const formula = button.dataset.roll;
+        const label = button.dataset.label ?? "Dice Roll";
+
+        if (formula) {
+          const roll = new Roll(formula, this.actor.getRollData());
+          await roll.evaluate({ async: true });
+          roll.toMessage({ flavor: label });
+        } else {
+          ui.notifications.warn("No valid roll or action defined.");
+        }
+      }
+    }
   }
 }

@@ -1,5 +1,9 @@
 <form class='{{cssClass}}' autocomplete='off'>
     <header class='sheet-header'>
+        <img class='profile-img'
+             src='{{item.img}}'
+             data-edit='img'
+             title='{{item.name}}'/>
         <div class='header-fields'>
             <h1 class='charname'>
                 <input name='name'
@@ -20,21 +24,29 @@
         {{! Description Tab }}
         <div class='tab' data-group='primary' data-tab='description'>
             <div class='resource'>
-                <div class="grid grid-5col">
-                    <div class="grid-span-5">
-                        <label>Details</label>
+                <div class="grid grid-6col">
+                    <div class="grid-span-2">
+                        <label>Bonus</label>
+                        <input type="number"
+                               name="system.bonus"
+                               value="{{system.bonus}}"
+                               data-dtype="Number"
+                               min="1"
+                               max="3"/>
+                    </div>
+                    <div class="grid-span-4">
+                        <label>Skill</label>
                         <input type="text"
-                               name="system.details"
-                               value="{{system.details}}"
+                               name="system.skill"
+                               value="{{system.skill}}"
                                data-dtype="String"/>
                     </div>
                 </div>
             </div>
             <h3>Notes:</h3>
-            {{! Editors must receive enriched text data from getData to properly handle rolls }}
             {{editor
                     enrichedDescription
-                    target='system.notes'
+                    target='system.description'
                     engine='prosemirror'
                     button=true
                     editable=editable

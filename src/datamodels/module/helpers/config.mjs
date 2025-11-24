@@ -18,14 +18,14 @@ BOILERPLATE.secondaryAttributes = {
   fate: "BOILERPLATE.SecondaryAttribute.Fate.long"
 };
 
-BOILERPLATE.abilityAbbreviations = {
+BOILERPLATE.primaryAttributesAbbreviations = {
   dex: 'BOILERPLATE.PrimaryAttribute.Dex.abbr',
   bod: 'BOILERPLATE.PrimaryAttribute.Bod.abbr',
   int: 'BOILERPLATE.PrimaryAttribute.Int.abbr',
   will: 'BOILERPLATE.PrimaryAttribute.Will.abbr'
 };
 
-BOILERPLATE.secondaryAbilityAbbreviations = {
+BOILERPLATE.secondaryAttributesAbbreviations = {
   healthpoints: 'BOILERPLATE.SecondaryAttribute.HealthPoints.abbr',
   mindpoints: 'BOILERPLATE.SecondaryAttribute.MindPoints.abbr',
   react: 'BOILERPLATE.SecondaryAttribute.React.abbr',

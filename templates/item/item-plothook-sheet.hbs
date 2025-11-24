@@ -1,7 +1,9 @@
 <form class="{{cssClass}}" autocomplete="off">
     <header class="sheet-header">
         <div class="header-fields">
-            <h1 class="charname"><input name="name" type="text" value="{{item.name}}" placeholder="Name"/></h1>
+            <h1 class="charname">
+                <input name="name" type="text" value="{{item.name}}" placeholder="Name"/>
+            </h1>
         </div>
     </header>
 
@@ -17,17 +19,17 @@
             <div class="resource">
                 <div class="grid grid-5col">
                     <div class="grid-span-1">
-                        <label>Level</label>
+                        <label>Ranks</label>
                         <input type="number"
-                               name="system.level"
-                               value="{{system.level}}"
+                               name="system.ranks"
+                               value="{{system.ranks}}"
                                data-dtype="Number"/>
                     </div>
                     <div class="grid-span-4">
-                        <label>Description</label>
+                        <label>Specialization</label>
                         <input type="text"
-                               name="system.details"
-                               value="{{system.details}}"
+                               name="system.specialization"
+                               value="{{system.specialization}}"
                                data-dtype="String"/>
                     </div>
                 </div>

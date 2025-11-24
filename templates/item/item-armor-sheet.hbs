@@ -34,7 +34,7 @@
         <div class='tab' data-group='primary' data-tab='description'>
             <div class='resource'>
                 <div class="grid grid-5col">
-                    <div class="grid-span-5">
+                    <div class="grid-span-6">
                         <label>Details</label>
                         <input type="text"
                                name="system.details"
@@ -48,11 +48,18 @@
                                value="{{system.armor}}"
                                data-dtype="Number"/>
                     </div>
-                    <div class="grid-span-3">
+                    <div class="grid-span-2">
                         <label>Shielding Bonus</label>
                         <input type="number"
                                name="system.shielding"
                                value="{{system.shielding}}"
+                               data-dtype="Number"/>
+                    </div>
+                    <div class="grid-span-2">
+                        <label>Channels</label>
+                        <input type="number"
+                               name="system.channelingSlots"
+                               value="{{system.channelingSlots}}"
                                data-dtype="Number"/>
                     </div>
                 </div>

@@ -3,7 +3,7 @@
     <li class='item flexrow items-header'>
         <div class='item-name'>{{localize 'Name'}}</div>
         <div class="item-prop">{{localize 'Ranks'}}</div>
-        <div class="item-prop">{{localize 'Specialization'}}</div>
+        <div class="item-name">{{localize 'Specialization'}}</div>
         <div class='item-controls'>
             <a class='item-control item-create'
                title='Add Skill'
@@ -15,9 +15,14 @@
     </li>
     {{#each skills as |item id|}}
         <li class='item flexrow' data-item-id='{{item._id}}'>
-            <div class='item-name'>{{item.name}}</div>
+            <div class='item-name rollable'
+                 data-action="roll@{{item.name}}"
+                 data-label="{{item.name}}"
+                 data-roll-type="skill">
+                {{item.name}}
+            </div>
             <div class="item-prop">{{item.system.ranks}}</div>
-            <div class="item-prop">{{item.system.specialization}}</div>
+            <div class="item-name">{{item.system.specialization}}</div>
             <div class='item-controls'>
                 <a class='item-control item-edit'
                    title='{{localize "DOCUMENT.Edit" type='Skill'}}'>

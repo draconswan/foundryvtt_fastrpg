@@ -51,9 +51,13 @@ Hooks.once('init', function () {
     CONFIG.Item.documentClass = BoilerplateItem;
     CONFIG.Item.dataModels = {
         item: models.BoilerplateItem,
+        armor: models.BoilerplateArmor,
+        weapon: models.BoilerplateWeapon,
+        channel: models.BoilerplateChannel,
         power: models.BoilerplatePower,
         skill: models.BoilerplateSkill,
-        benefit: models.BoilerplateBenefit
+        benefit: models.BoilerplateBenefit,
+        plothook: models.BoilerplatePlothook
     }
 
     // Active Effects are never copied to the Actor,
@@ -62,13 +66,13 @@ Hooks.once('init', function () {
     CONFIG.ActiveEffect.legacyTransferral = false;
 
     // Register sheet application classes
-    Actors.unregisterSheet('core', ActorSheet);
-    Actors.registerSheet('boilerplate', BoilerplateActorSheet, {
+    foundry.documents.collections.Actors.unregisterSheet('core', foundry.appv1.sheets.ActorSheet);
+    foundry.documents.collections.Actors.registerSheet('boilerplate', BoilerplateActorSheet, {
         makeDefault: true,
         label: 'BOILERPLATE.SheetLabels.Actor',
     });
-    Items.unregisterSheet('core', ItemSheet);
-    Items.registerSheet('boilerplate', BoilerplateItemSheet, {
+    foundry.documents.collections.Items.unregisterSheet('core', foundry.appv1.sheets.ItemSheet);
+    foundry.documents.collections.Items.registerSheet('boilerplate', BoilerplateItemSheet, {
         makeDefault: true,
         label: 'BOILERPLATE.SheetLabels.Item',
     });
@@ -125,7 +129,7 @@ async function createItemMacro(data, slot) {
         );
     }
     // If it is, retrieve it based on the uuid.
-    const item = await Item.fromDropData(data);
+    const item = await foundry.documents.Item.fromDropData(data);
 
     // Create the macro command using the uuid.
     const command = `game.boilerplate.rollItemMacro("${data.uuid}");`;
@@ -157,7 +161,7 @@ function rollItemMacro(itemUuid) {
         uuid: itemUuid,
     };
     // Load the item from the uuid.
-    Item.fromDropData(dropData).then((item) => {
+    foundry.documents.Item.fromDropData(dropData).then((item) => {
         // Determine if the item loaded and if it's an owned item.
         if (!item || !item.parent) {
             const itemName = item?.name ?? itemUuid;

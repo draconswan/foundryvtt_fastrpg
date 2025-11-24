@@ -40,7 +40,8 @@
       "item": "Item",
       "power": "Power",
       "skill": "Skill",
-      "benefit": "Benefit"
+      "benefit": "Benefit",
+      "plothook": "Plothook"
     }
   }
 }
