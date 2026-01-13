@@ -3,6 +3,6 @@
     "types": ["character", "npc"]
   },
   "Item": {
-    "types": ["item", "armor", "weapon", "channel", "power", "skill", "benefit", "plothook"]
+    "types": ["item", "armor", "weapon", "channel", "attachment", "power", "skill", "benefit", "plothook"]
   }
 }

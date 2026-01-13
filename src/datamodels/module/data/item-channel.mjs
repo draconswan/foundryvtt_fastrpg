@@ -19,12 +19,7 @@ export default class BoilerplateChannel extends BoilerplateItemBase {
     // If this channel is linked to an armor, resolve it
     if (this.parent && this.parentArmor) {
       const armor = this.parent.parent.items.get(this.parentArmor);
-      if (armor) {
-        this.parentArmorItem = armor;
-      } else {
-        // If the reference is stale, clear it
-        this.parentArmorItem = null;
-      }
+      this.parentArmorItem = armor ?? null;
     }
   }
 }

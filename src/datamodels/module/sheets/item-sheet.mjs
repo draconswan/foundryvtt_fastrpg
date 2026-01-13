@@ -71,6 +71,9 @@ export class BoilerplateItemSheet extends foundry.appv1.sheets.ItemSheet {
     // Prepare active effects for easier access
     context.effects = prepareActiveEffectCategories(this.item.effects);
 
+    //Expose schema fields from data model
+    context.fields = this.item.system.schema.fields;
+
     return context;
   }
 

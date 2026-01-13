@@ -7,12 +7,12 @@ import {
  * Extend the basic ActorSheet with some very simple modifications
  * @extends {ActorSheet}
  */
-export class BoilerplateActorSheet extends ActorSheet {
+export class BoilerplateActorSheet extends foundry.appv1.sheets.ActorSheet {
   /** @override */
   static get defaultOptions() {
     return foundry.utils.mergeObject(super.defaultOptions, {
       classes: ['boilerplate', 'sheet', 'actor'],
-      width: 600,
+      width: 720,
       height: 600,
       tabs: [
         {
@@ -33,21 +33,26 @@ export class BoilerplateActorSheet extends ActorSheet {
 
   /** @override */
   async getData() {
-    // Retrieve the data structure from the base sheet. You can inspect or log
-    // the context variable to see the structure, but some key properties for
-    // sheets are the actor object, the data object, whether or not it's
-    // editable, the items array, and the effects array.
-    const context = super.getData();
+    const actor = this.actor;
+    const context = {
+      actor,
+      system: actor.system,
+      flags: actor.flags,
+      editable: this.isEditable,
+      config: CONFIG.BOILERPLATE,
+      items: actor.items
+    };
 
     // Use a safe clone of the actor data for further operations.
-    const items = this.actor.items.contents;
-    context.armor     = items.filter(i => i.type === "armor");
-    context.gear      = items.filter(i => i.type === "item");
-    context.weapons   = items.filter(i => i.type === "weapon");
-    context.channels  = items.filter(i => i.type === "channel");
-    context.skills    = items.filter(i => i.type === "skill")
-    context.benefits  = items.filter(i => i.type === "benefit")
-    context.plothooks = items.filter(i => i.type === "plothook")
+    const items = actor.items;
+    context.armor        = items.filter(i => i.type === "armor");
+    context.gear         = items.filter(i => i.type === "item");
+    context.weapons      = items.filter(i => i.type === "weapon");
+    context.channels     = items.filter(i => i.type === "channel");
+    context.attachments  = items.filter(i => i.type === "attachment");
+    context.skills       = items.filter(i => i.type === "skill")
+    context.benefits     = items.filter(i => i.type === "benefit")
+    context.plothooks    = items.filter(i => i.type === "plothook")
 
     // Add the actor's data to context.data for easier access, as well as flags.
     context.system = this.actor.system
@@ -57,29 +62,29 @@ export class BoilerplateActorSheet extends ActorSheet {
     context.config = CONFIG.BOILERPLATE;
 
     // Prepare character data and items.
-    if (this.actor.type == 'character') {
+    if (actor.type == 'character') {
       this._prepareItems(context);
       this._prepareCharacterData(context);
     }
 
     // Prepare NPC data and items.
-    if (this.actor.type == 'npc') {
+    if (actor.type == 'npc') {
       this._prepareItems(context);
     }
 
     // Enrich biography info for display
     // Enrichment turns text like `[[/r 1d20]]` into buttons
     context.enrichedBiography = await foundry.applications.ux.TextEditor.implementation.enrichHTML(
-      this.actor.system.biography,
+      actor.system.biography,
       {
         // Whether to show secret blocks in the finished html
         secrets: this.document.isOwner,
         // Necessary in v11, can be removed in v12
         async: true,
         // Data to fill in for inline rolls
-        rollData: this.actor.getRollData(),
+        rollData: actor.getRollData(),
         // Relative UUID resolution
-        relativeTo: this.actor,
+        relativeTo: actor,
       }
     );
 
@@ -87,7 +92,7 @@ export class BoilerplateActorSheet extends ActorSheet {
     context.effects = prepareActiveEffectCategories(
       // A generator that returns all effects stored on the actor
       // as well as any items
-      this.actor.allApplicableEffects()
+      actor.allApplicableEffects()
     );
 
     return context;
@@ -114,6 +119,7 @@ export class BoilerplateActorSheet extends ActorSheet {
       const armor = [];
       const weapons = [];
       const channels = [];
+      const attachments = [];
       const powers = [];
       const skills = [];
       const benefits = [];
@@ -127,16 +133,20 @@ export class BoilerplateActorSheet extends ActorSheet {
           gear.push(i);
         }
         // Append to Armor
-        else if (i.type == "armor"){
+        else if (i.type == "armor") {
           armor.push(i);
         }
         // Append to Weapons
-        else if (i.type == "weapon"){
+        else if (i.type == "weapon") {
           weapons.push(i);
         }
         // Append to Channels
-        else if (i.type == "channel"){
+        else if (i.type == "channel") {
           channels.push(i);
+        }
+        // Append to Attachments
+        else if (i.type == "attachment"){
+          attachments.push(i);
         }
         // Append to powers.
         else if (i.type === 'power') {
@@ -160,6 +170,7 @@ export class BoilerplateActorSheet extends ActorSheet {
       context.armor = armor;
       context.weapons = weapons;
       context.channels = channels;
+      context.attachments = attachments;
       context.powers = powers;
       context.skills = skills;
       context.benefits = benefits;
@@ -219,6 +230,88 @@ export class BoilerplateActorSheet extends ActorSheet {
         li.addEventListener('dragstart', handler, false);
       });
     }
+  }
+
+  _promptAttributeSelection(skill, label) {
+    const attributes = this.actor.system.primaryAttributes ?? {};
+    let content = `
+      <p>Add any miscellaneous bonuses or penalties:</p>
+      <div class="form-group flexrow flex-group-center">
+        <label class="align-left">Misc Bonus</label>
+        <input type="number" name="miscBonus" value="0"/>
+      </div>
+      <p>Choose how to apply the attribute:</p>
+    `;
+
+    const buttons = {};
+    // Flat bonus buttons (top row)
+    for (let [key, attr] of Object.entries(attributes)) {
+      const val = attr?.value ?? 0;
+      buttons[`${key}-bonus`] = {
+        label: `${key.toUpperCase()} (+${val})`,
+        callback: html => {
+          const misc = parseInt(html.find("input[name='miscBonus']").val()) || 0;
+          this._rollSkill(skill, key, label, false, misc);
+        }
+      };
+    }
+
+    // Dice buttons (bottom row)
+    for (let [key, attr] of Object.entries(attributes)) {
+      const val = attr?.value ?? 0;
+      buttons[`${key}-dice`] = {
+        label: `${key.toUpperCase()} (${val}ds)`,
+        callback: html => {
+          const misc = parseInt(html.find("input[name='miscBonus']").val()) || 0;
+          this._rollSkill(skill, key, label, true, misc);
+        }
+      };
+    }
+
+    new Dialog({
+      title: `Select Attribute for ${skill.name}`,
+      content,
+      buttons,
+      default: Object.keys(attributes)[0]
+    }).render(true);
+  }
+
+  _rollSkill(skill, attrKey, label, rollAsDice=false, miscBonus=0) {
+    const mod = skill.system.ranks ?? 0;
+    const specialization = skill.system.specialization;
+
+    let rollFormula = `${mod}ds`;
+    //Add selected attribute value
+    const attrValue = this.actor.system.primaryAttributes?.[attrKey]?.value ?? 0;
+    if (attrValue > 0) {
+      if (rollAsDice) {
+        rollFormula += `+${attrValue}ds`;
+      } else {
+        rollFormula += `+${attrValue}`;
+      }
+    }
+    // Add channel bonus
+    const channels = this.actor.items.filter(i =>
+        i.type === "channel" &&
+        (i.system.skill === skill.name || i.system.skill === (skill.name + ": " + specialization))
+    )
+    const bonus = channels.reduce((sum, c) => sum + (c.system.bonus ?? 0), 0);
+    if (bonus > 0) {
+      rollFormula += `+${bonus}`;
+    }
+    if (miscBonus != 0) {
+      rollFormula += `+${miscBonus}`;
+    }
+
+    const roll = new Roll(rollFormula);
+    roll.evaluate().then(r => {
+      r.toMessage({
+        speaker: ChatMessage.getSpeaker({ actor: this.actor }),
+        flavor: `${label} Dice Pool (${attrKey.toUpperCase()} ${rollAsDice ? "as dice" : "bonus"} + misc ${miscBonus})`,
+        rollMode: game.settings.get("core", "rollMode"),
+      });
+    });
+    return;
   }
 
   async _onChannelDrop(event) {
@@ -283,30 +376,7 @@ export class BoilerplateActorSheet extends ActorSheet {
       else if (dataset.rollType == 'skill') {
         const itemId = element.closest('.item').dataset.itemId;
         const skill = this.actor.items.get(itemId);
-        const name = skill.name;
-        const mod = skill.system.ranks;
-        const specialization = skill.system.specialization;
-        if (mod > 0) {
-          const channels = this.actor.items.filter(i =>
-              i.type === "channel" &&
-              (i.system.skill === name || i.system.skill === (name + ": " + specialization))
-          )
-          const bonus = channels?.map(c => c.system.bonus)
-          let rollFormula = `${mod}ds`;
-          if (bonus > 0) {
-            rollFormula += `+${bonus}`
-          }
-          const roll = new Roll(rollFormula);
-          roll.evaluate().then(r => {
-            r.toMessage({
-              speaker: ChatMessage.getSpeaker({ actor: this.actor }),
-              flavor: `${dataset.label} Dice Pool`,
-              rollMode: game.settings.get('core', 'rollMode'),
-            });
-          });
-        } else {
-          ui.notifications.warn(`${dataset.label} modifier must be at least 1 to roll.`);
-        }
+        if (skill) return this._promptAttributeSelection(skill, dataset.label);
         return;
       }
     }
@@ -345,5 +415,72 @@ export class BoilerplateActorSheet extends ActorSheet {
       });
       return roll;
     }
+  }
+
+  async _onDrop(event) {
+    event.preventDefault();
+
+    const data = TextEditor.getDragEventData(event);
+
+    // Only handle item drops
+    if (data.type !== "Item") return super._onDrop(event);
+
+    // Get the dropped item
+    const dropped = await Item.implementation.fromDropData(data);
+
+    // -----------------------------
+    // 1. ITEM → ACTOR (default)
+    // -----------------------------
+    // If the drop is NOT on a specific slot, let Foundry handle it normally.
+    const slot = event.target.closest("[data-item-id]");
+    if (!slot) {
+      return super._onDrop(event);
+    }
+
+    const targetItemId = slot.dataset.itemId;
+    const targetItem = this.actor.items.get(targetItemId);
+
+    // -----------------------------
+    // 2. ATTACHMENT → WEAPON
+    // -----------------------------
+    if (dropped.type === "attachment" && targetItem?.type === "weapon") {
+        const allowed = targetItem.system.constructor.allowedAttachmentTypes[targetItem.system.type] ?? [];
+        // If invalid, warn and abort
+        if (!allowed.includes(dropped.system.type)) {
+          ui.notifications.warn(
+            `${dropped.name} cannot be attached to a ${targetItem.system.type} weapon`
+          );
+          return;
+        }
+
+        return this.actor.createEmbeddedDocuments("Item", [{
+            name: dropped.name,
+            type: "attachment",
+            system: {
+              parentWeapon: targetItemId,
+              type: dropped.system.type
+            }
+        }]);
+    }
+
+    // -----------------------------
+    // 3. CHANNEL → ARMOR
+    // -----------------------------
+    if (dropped.type === "channel" && targetItem?.type === "armor") {
+      return this.actor.createEmbeddedDocuments("Item", [{
+        name: dropped.name,
+        type: "channel",
+        system: {
+          parentArmor: targetItemId,
+          bonus: dropped.system.bonus ?? 1,
+          skill: dropped.system.skill ?? ""
+        }
+      }]);
+    }
+
+    // -----------------------------
+    // 4. Anything else → default
+    // -----------------------------
+    return super._onDrop(event);
   }
 }

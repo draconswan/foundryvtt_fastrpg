@@ -8,6 +8,8 @@ export const preloadHandlebarsTemplates = async function () {
     // Actor partials.
     'systems/boilerplate/templates/actor/parts/actor-skills.hbs',
     'systems/boilerplate/templates/actor/parts/actor-benefits.hbs',
+    'systems/boilerplate/templates/actor/parts/actor-armor.hbs',
+    'systems/boilerplate/templates/actor/parts/actor-weapons.hbs',
     'systems/boilerplate/templates/actor/parts/actor-items.hbs',
     'systems/boilerplate/templates/actor/parts/actor-powers.hbs',
     'systems/boilerplate/templates/actor/parts/actor-plothooks.hbs',

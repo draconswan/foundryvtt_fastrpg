@@ -40,7 +40,10 @@ Hooks.once('init', function () {
 
     // Define custom Document and DataModel classes
     CONFIG.Actor.documentClass = BoilerplateActor;
-
+    CONFIG.Actor.typeClasses = {
+        character: models.BoilerplateCharacter,
+        npc: models.BoilerplateNPC
+    }
     // Note that you don't need to declare a DataModel
     // for the base actor/item classes - they are included
     // with the Character/NPC as part of super.defineSchema()
@@ -49,11 +52,23 @@ Hooks.once('init', function () {
         npc: models.BoilerplateNPC
     }
     CONFIG.Item.documentClass = BoilerplateItem;
+    CONFIG.Item.typeClasses = {
+        item: models.BoilerplateItem,
+        armor: models.BoilerplateArmor,
+        weapon: models.BoilerplateWeapon,
+        channel: models.BoilerplateChannel,
+        attachment: models.BoilerplateAttachment,
+        power: models.BoilerplatePower,
+        skill: models.BoilerplateSkill,
+        benefit: models.BoilerplateBenefit,
+        plothook: models.BoilerplatePlothook
+    };
     CONFIG.Item.dataModels = {
         item: models.BoilerplateItem,
         armor: models.BoilerplateArmor,
         weapon: models.BoilerplateWeapon,
         channel: models.BoilerplateChannel,
+        attachment: models.BoilerplateAttachment,
         power: models.BoilerplatePower,
         skill: models.BoilerplateSkill,
         benefit: models.BoilerplateBenefit,

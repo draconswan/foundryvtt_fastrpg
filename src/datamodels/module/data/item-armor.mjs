@@ -17,22 +17,23 @@ export default class BoilerplateArmor extends BoilerplateItemBase {
 
   prepareDerivedData() {
     super.prepareDerivedData?.()
+    const actor = this.parent?.parent;
+    const max = this.channelingSlots ?? 0;
+    if (!actor) {
+      this.channelSlots = Array.from({ length: max }, () => ({ item: null }));
+      return;
+    }
 
-    // Always initialize
     const item = this.parent;
-
-    if (item.parent?.items) {
-      const channels = item.parent.items.filter(i =>
+    if (actor.items) {
+      const channels = actor.items.filter(i =>
         i.type === "channel" &&
-        i.system.parentArmor === item.id // link field on the Channel
+        i.system.parentArmor === item.id
       );
-      console.log(channels.map(c => c.system.bonus))
-      this.usedSlots = channels.map(c => c.system.bonus).reduce((sum, bonus) => sum + bonus, 0);
-
-      // Enforce slot limit
-      if (channels.length > this.channelingSlots) {
-        ui.notifications.warn(`${this.name} has more channels than available slots!`);
-      }
+      this.channelSlots = [
+        ...channels.map(ch => ({ item: ch })),
+        ...Array.from({ length: max - channels.length }, () => ({ item: null }))
+      ];
     }
   }
 }

@@ -367,3 +367,18 @@
 .fastdie-zero { color: red; }
 .fastdie-one { color: orange; }
 .fastdie-two { color: green; }
+
+.dialog .dialog-buttons {
+  display: grid;
+  grid-template-rows: auto auto;
+  grid-auto-flow: row;
+  gap: 0.5em;
+}
+
+.dialog .dialog-buttons button[data-button$="-bonus"] {
+  grid-row: 1;
+}
+
+.dialog .dialog-buttons button[data-button$="-dice"] {
+  grid-row: 2;
+}
